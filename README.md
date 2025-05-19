@@ -26,7 +26,7 @@ Le but est d'identifier les éléments problématiques de l'application, de les 
    - Identifiez les différents composants et leur fonctionnement
 
 4. **Corriger l'issue**
-   - Il y [a une issue ouverte](https://github.com/gary-van-woerkens/my-beautiful-blog/issues/1) concernant un bug d'authentification
+   - Il y a [une issue ouverte](https://github.com/gary-van-woerkens/my-beautiful-blog/issues/1) concernant un bug d'authentification
    - Proposez une ou plusieurs PRs afin que l'application fonctionne correctement
 
 5. **Ouvrir des issues**
