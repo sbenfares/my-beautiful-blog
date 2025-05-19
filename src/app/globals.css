@@ -1,0 +1,256 @@
+/* Styles globaux (volontairement problématiques) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS globales */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --error-color: #dc3545;
+  --success-color: #28a745;
+  --font-family: 'Arial', sans-serif;
+}
+
+/* Styles en mode sombre (devrait être dans une media query) */
+.dark-mode {
+  --background-color: #121212;
+  --text-color: #f5f5f5;
+  --primary-color: #4dabf7;
+  --secondary-color: #adb5bd;
+}
+
+/* Styles de base */
+body {
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Styles en mode mobile (devrait être dans une media query) */
+body.mobile .container {
+  width: 100%;
+  padding: 0 10px;
+}
+
+/* Styles du conteneur principal */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Styles de l'en-tête */
+.header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.header nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.header nav a, .header nav button {
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem;
+  display: inline-block;
+}
+
+.header nav a:hover, .header nav button:hover {
+  text-decoration: underline;
+}
+
+/* Styles du pied de page */
+.footer {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* Styles des articles */
+.post-list-container {
+  margin-bottom: 2rem;
+}
+
+.post-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .post-card {
+  background-color: #1e1e1e;
+  border-color: #444;
+}
+
+.post-card h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+
+.post-meta {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-tags {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+/* Styles de pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: var(--secondary-color);
+  cursor: not-allowed;
+}
+
+/* Styles de connexion */
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .login-form {
+  background-color: #1e1e1e;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.dark-mode .form-group input, .dark-mode .form-group textarea {
+  background-color: #333;
+  color: #f5f5f5;
+  border-color: #555;
+}
+
+.error {
+  color: var(--error-color);
+  margin-bottom: 1rem;
+}
+
+/* Styles d'administration */
+.admin-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.create-post-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.dark-mode .create-post-form {
+  background-color: #1e1e1e;
+}
+
+.tags-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.tag-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+/* Styles de la page non trouvée */
+.not-found, .unauthorized {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.not-found a, .unauthorized button {
+  display: inline-block;
+  margin-top: 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
