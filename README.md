@@ -24,15 +24,18 @@ Le but est d'identifier les éléments problématiques de l'application, de les 
 3. **Analyser le code**
    - Prenez le temps d'examiner la structure du projet
    - Identifiez les différents composants et leur fonctionnement
-   - Recherchez les problèmes de conception, de sécurité et de performance
 
-4. **Ouvrir des issues**
+4. **Corriger l'issue**
+   - Il y [a une issue ouverte](https://github.com/gary-van-woerkens/my-beautiful-blog/issues/1) concernant un bug d'authentification
+   - Proposez une ou plusieurs PRs afin que l'application fonctionne correctement
+
+5. **Ouvrir des issues**
+   - Recherchez les problèmes de conception, de sécurité et de performance
    - Créez des issues GitHub pour chaque problème identifié
-   - Priorisez les problèmes graves (sécurité, performance critique) en premier
-   - Puis documentez les problèmes moins critiques
+   - Priorisez les problèmes graves (sécurité, performance critique)
    - Vous pouvez proposer des solutions ou des pistes d'amélioration
 
-5. **Limitation de temps**
+6. **Limitation de temps**
    - Ne passez pas plus d'une heure sur cet exercice
    - L'objectif est d'évaluer votre capacité à identifier rapidement les problèmes critiques
 
