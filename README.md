@@ -68,3 +68,5 @@ L'application utilise l'architecture App Router de Next.js :
 - `/src/lib/` - Bibliothèques et utilitaires
 - `/src/types/` - Définitions de types TypeScript
 
+## Tests
+- Ajout de tests unitaires (vitest?) topo ici
