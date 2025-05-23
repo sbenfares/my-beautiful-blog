@@ -7,6 +7,8 @@ async function initializeDatabase() {
   // Déterminer si on est en environnement de production
   const isProduction = process.env.NODE_ENV === "production";
 
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
   // Configurer le client en fonction de l'environnement
   let client;
   if (isProduction) {
@@ -51,7 +53,12 @@ async function initializeDatabase() {
 
     // Ajouter l'utilisateur admin s'il n'existe pas
     if (userResult.rows.length === 0) {
-      const hashedPassword = await hash("admin123"); // Hash argon2 du mot de passe
+      if (!adminPassword) {
+        throw new Error(
+          "ADMIN_PASSWORD n'est pas défini dans les variables d'environnement."
+        );
+      }
+      const hashedPassword = await hash(adminPassword); // Hash argon2 du mot de passe
       await client.query(
         "INSERT INTO users (username, password) VALUES ($1, $2)",
         ["admin", hashedPassword]
