@@ -1,10 +1,13 @@
 // Script d'initialisation de la base de données avec des tables et des données de test
 import { Client } from 'pg';
+import { hash } from 'argon2';
 
 // Connexion à la base de données
 async function initializeDatabase() {
   // Déterminer si on est en environnement de production
   const isProduction = process.env.NODE_ENV === 'production';
+
+  const adminPassword = process.env.ADMIN_PASSWORD;
 
   // Configurer le client en fonction de l'environnement
   let client;
@@ -50,11 +53,17 @@ async function initializeDatabase() {
 
     // Ajouter l'utilisateur admin s'il n'existe pas
     if (userResult.rows.length === 0) {
+      if (!adminPassword) {
+        throw new Error(
+          "ADMIN_PASSWORD n'est pas défini dans les variables d'environnement.",
+        );
+      }
+      const hashedPassword = await hash(adminPassword); // Hash argon2 du mot de passe
       await client.query(
         'INSERT INTO users (username, password) VALUES ($1, $2)',
-        ['admin', 'admin123'],
+        ['admin', hashedPassword],
       );
-      console.log('Utilisateur admin créé');
+      console.log('Utilisateur admin créé avec mot de passe sécurisé');
     }
 
     // Créer la table tags si elle n'existe pas
