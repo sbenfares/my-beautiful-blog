@@ -45,7 +45,9 @@ Le but est d'identifier les éléments problématiques de l'application, de les 
    - L'objectif est d'évaluer votre capacité à identifier rapidement les problèmes critiques
 
 ## Installation et configuration
-
+### ENV
+   - Ajouter ici un topo sur l'utilisation d'env.local / env.docker
+    
 1. Installer les dépendances
 
    ```bash
