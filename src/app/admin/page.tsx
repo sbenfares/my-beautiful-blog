@@ -10,15 +10,17 @@ export default function AdminPage() {
   const [newPostContent, setNewPostContent] = useState('');
   const [newPostTags, setNewPostTags] = useState<number[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
-  
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState<Record<string, unknown> | null>(null);
-  
+  const [userData, setUserData] = useState<Record<string, unknown> | null>(
+    null,
+  );
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const router = useRouter();
-  
+
   useEffect(() => {
     // Vérification du token stocké en local
     const token = localStorage.getItem('token');
@@ -27,7 +29,7 @@ export default function AdminPage() {
       router.push('/login');
       return;
     }
-    
+
     // Récupération des données utilisateur
     const userDataStr = localStorage.getItem('user');
     if (userDataStr) {
@@ -35,37 +37,41 @@ export default function AdminPage() {
         const userDataObj = JSON.parse(userDataStr);
         setUserData(userDataObj);
         setIsLoggedIn(true);
-        
+
         if (typeof window !== 'undefined') {
           window.globalState.isLoggedIn = true;
           window.globalState.userData = userDataObj;
         }
       } catch (err) {
-        console.error('Erreur lors de la lecture des données utilisateur:', err);
+        console.error(
+          'Erreur lors de la lecture des données utilisateur:',
+          err,
+        );
       }
     }
-    
+
     // Charger les tags au chargement du composant
     fetchTags();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  
+
   // Fonction pour récupérer les tags
   const fetchTags = async () => {
     try {
-      const apiBaseUrl = typeof window !== 'undefined' ? window.globalState.apiBaseUrl : '/api';
+      const apiBaseUrl =
+        typeof window !== 'undefined' ? window.globalState.apiBaseUrl : '/api';
       const response = await fetch(`${apiBaseUrl}/tags`);
-      
+
       if (!response.ok) {
         throw new Error('Erreur lors de la récupération des tags');
       }
-      
+
       const data = await response.json();
       setTags(data);
     } catch (err) {
       console.error('Erreur:', err);
     }
   };
-  
+
   // Fonction pour gérer la sélection des tags
   const handleTagSelection = (tagId: number) => {
     setNewPostTags((prevTags) => {
@@ -79,30 +85,31 @@ export default function AdminPage() {
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!isLoggedIn || !userData) {
       alert('Vous devez être connecté pour créer un article');
       router.push('/login');
       return;
     }
-    
+
     if (!newPostTitle.trim() || !newPostContent.trim()) {
       alert('Veuillez remplir tous les champs');
       return;
     }
-    
+
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const token = localStorage.getItem('token');
-      
-      const apiBaseUrl = typeof window !== 'undefined' ? window.globalState.apiBaseUrl : '/api';
+
+      const apiBaseUrl =
+        typeof window !== 'undefined' ? window.globalState.apiBaseUrl : '/api';
       const response = await fetch(`${apiBaseUrl}/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: newPostTitle,
@@ -111,21 +118,21 @@ export default function AdminPage() {
           tags: newPostTags,
         }),
       });
-      
+
       if (!response.ok) {
-        throw new Error('Erreur lors de la création de l\'article');
+        throw new Error("Erreur lors de la création de l'article");
       }
-      
+
       setNewPostTitle('');
       setNewPostContent('');
       setNewPostTags([]);
-      
+
       alert('Article créé avec succès !');
 
       window.location.href = '/';
     } catch (err) {
       console.error('Erreur:', err);
-      setError('Erreur lors de la création de l\'article');
+      setError("Erreur lors de la création de l'article");
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +142,7 @@ export default function AdminPage() {
     <div className="container">
       <div className="admin-container">
         <h2>Administration</h2>
-        
+
         {!isLoggedIn && (
           <div className="unauthorized">
             <p>Vous devez être connecté pour accéder à cette page</p>
@@ -144,11 +151,11 @@ export default function AdminPage() {
             </button>
           </div>
         )}
-        
+
         {isLoggedIn && (
           <div className="create-post-form">
             <h3>Créer un nouvel article</h3>
-            
+
             <form onSubmit={handleCreatePost}>
               <div className="form-group">
                 <label htmlFor="title">Titre</label>
@@ -159,7 +166,7 @@ export default function AdminPage() {
                   onChange={(e) => setNewPostTitle(e.target.value)}
                 />
               </div>
-              
+
               <div className="form-group">
                 <label htmlFor="content">Contenu</label>
                 <textarea
@@ -169,7 +176,7 @@ export default function AdminPage() {
                   rows={10}
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Tags</label>
                 <div className="tags-selection">
@@ -189,16 +196,16 @@ export default function AdminPage() {
                   )}
                 </div>
               </div>
-              
+
               <button type="submit" disabled={isLoading}>
                 {isLoading ? 'Publication en cours...' : 'Publier'}
               </button>
-              
+
               {error && <p className="error">{error}</p>}
             </form>
           </div>
         )}
-        
+
         <div className="admin-footer">
           <Link href="/">Retour à l&apos;accueil</Link>
         </div>

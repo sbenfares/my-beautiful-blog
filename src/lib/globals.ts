@@ -22,7 +22,7 @@ export function initGlobalState() {
       isLoggedIn: false,
       userData: null,
       darkMode: localStorage.getItem('darkMode') === 'true',
-      apiBaseUrl: '/api'
+      apiBaseUrl: '/api',
     };
   }
 }
