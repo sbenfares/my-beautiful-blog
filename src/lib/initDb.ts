@@ -1,11 +1,11 @@
 // Script d'initialisation de la base de données avec des tables et des données de test
-import { Client } from "pg";
-import { hash } from "argon2";
+import { Client } from 'pg';
+import { hash } from 'argon2';
 
 // Connexion à la base de données
 async function initializeDatabase() {
   // Déterminer si on est en environnement de production
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = process.env.NODE_ENV === 'production';
 
   const adminPassword = process.env.ADMIN_PASSWORD;
 
@@ -17,24 +17,24 @@ async function initializeDatabase() {
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false }, // Nécessaire pour la connexion SSL à Neon
     });
-    console.log("Initialisation avec la base de données Neon (production)");
+    console.log('Initialisation avec la base de données Neon (production)');
   } else {
     // En développement, utiliser Docker
     client = new Client({
-      host: "localhost",
+      host: 'localhost',
       port: 5432,
-      database: "blog",
-      user: "postgres",
-      password: "postgres",
+      database: 'blog',
+      user: 'postgres',
+      password: 'postgres',
     });
     console.log(
-      "Initialisation avec la base de données locale (développement)"
+      'Initialisation avec la base de données locale (développement)',
     );
   }
 
   try {
     await client.connect();
-    console.log("Connecté à la base de données pour initialisation");
+    console.log('Connecté à la base de données pour initialisation');
 
     // Créer la table users si elle n'existe pas
     await client.query(`
@@ -47,23 +47,23 @@ async function initializeDatabase() {
 
     // Vérifier si l'utilisateur admin existe déjà
     const userResult = await client.query(
-      "SELECT * FROM users WHERE username = $1",
-      ["admin"]
+      'SELECT * FROM users WHERE username = $1',
+      ['admin'],
     );
 
     // Ajouter l'utilisateur admin s'il n'existe pas
     if (userResult.rows.length === 0) {
       if (!adminPassword) {
         throw new Error(
-          "ADMIN_PASSWORD n'est pas défini dans les variables d'environnement."
+          "ADMIN_PASSWORD n'est pas défini dans les variables d'environnement.",
         );
       }
       const hashedPassword = await hash(adminPassword); // Hash argon2 du mot de passe
       await client.query(
-        "INSERT INTO users (username, password) VALUES ($1, $2)",
-        ["admin", hashedPassword]
+        'INSERT INTO users (username, password) VALUES ($1, $2)',
+        ['admin', hashedPassword],
       );
-      console.log("Utilisateur admin créé avec mot de passe sécurisé");
+      console.log('Utilisateur admin créé avec mot de passe sécurisé');
     }
 
     // Créer la table tags si elle n'existe pas
@@ -75,15 +75,15 @@ async function initializeDatabase() {
     `);
 
     // Ajouter des tags de test s'ils n'existent pas
-    const tagTitles = ["JavaScript", "React", "NextJS", "TypeScript", "CSS"];
+    const tagTitles = ['JavaScript', 'React', 'NextJS', 'TypeScript', 'CSS'];
     for (const title of tagTitles) {
       const tagResult = await client.query(
-        "SELECT * FROM tags WHERE title = $1",
-        [title]
+        'SELECT * FROM tags WHERE title = $1',
+        [title],
       );
 
       if (tagResult.rows.length === 0) {
-        await client.query("INSERT INTO tags (title) VALUES ($1)", [title]);
+        await client.query('INSERT INTO tags (title) VALUES ($1)', [title]);
         console.log(`Tag ${title} créé`);
       }
     }
@@ -101,60 +101,60 @@ async function initializeDatabase() {
     `);
 
     // Vérifier s'il y a des articles
-    const postsResult = await client.query("SELECT COUNT(*) FROM posts");
+    const postsResult = await client.query('SELECT COUNT(*) FROM posts');
 
     // Ajouter des articles de test s'il n'y en a pas
     if (parseInt(postsResult.rows[0].count) === 0) {
       // Articles de test
       const testPosts = [
         {
-          title: "Article de test 15",
+          title: 'Article de test 15',
           content:
             "Ceci est le contenu de l'article de test numéro 15. Il contient beaucoup de texte intéressant que personne ne lira jamais.",
-          author: "user1",
+          author: 'user1',
           tags: [1, 3], // JavaScript, NextJS
         },
         {
-          title: "Article de test 18",
+          title: 'Article de test 18',
           content:
             "Ceci est le contenu de l'article de test numéro 18. Il contient beaucoup de texte intéressant que personne ne lira jamais.",
-          author: "admin",
+          author: 'admin',
           tags: [2, 4], // React, TypeScript
         },
         {
-          title: "Article de test 19",
+          title: 'Article de test 19',
           content:
             "Ceci est le contenu de l'article de test numéro 19. Il contient beaucoup de texte intéressant que personne ne lira jamais.",
-          author: "user1",
+          author: 'user1',
           tags: [3, 5], // NextJS, CSS
         },
         {
-          title: "Article de test 14",
+          title: 'Article de test 14',
           content:
             "Ceci est le contenu de l'article de test numéro 14. Il contient beaucoup de texte intéressant que personne ne lira jamais.",
-          author: "admin",
+          author: 'admin',
           tags: [1, 2, 5], // JavaScript, React, CSS
         },
       ];
 
       for (const post of testPosts) {
         await client.query(
-          "INSERT INTO posts (title, content, author, tags) VALUES ($1, $2, $3, $4)",
-          [post.title, post.content, post.author, post.tags]
+          'INSERT INTO posts (title, content, author, tags) VALUES ($1, $2, $3, $4)',
+          [post.title, post.content, post.author, post.tags],
         );
         console.log(`Article "${post.title}" créé`);
       }
     }
 
-    console.log("Initialisation de la base de données terminée avec succès");
+    console.log('Initialisation de la base de données terminée avec succès');
   } catch (error) {
     console.error(
       "Erreur lors de l'initialisation de la base de données:",
-      error
+      error,
     );
   } finally {
     await client.end();
-    console.log("Connexion à la base de données fermée");
+    console.log('Connexion à la base de données fermée');
   }
 }
 

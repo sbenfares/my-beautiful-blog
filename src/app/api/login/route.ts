@@ -1,24 +1,24 @@
 // API Route pour l'authentification
-import { NextResponse } from "next/server";
-import { executeQuery } from "@/lib/db";
-import jwt from "jsonwebtoken";
-import { verify } from "argon2";
+import { NextResponse } from 'next/server';
+import { executeQuery } from '@/lib/db';
+import jwt from 'jsonwebtoken';
+import { verify } from 'argon2';
 
-const JWT_SECRET = process.env.JWT_SECRET || "mon_secret_jwt";
-const JWT_ISSUER = "my-beautiful-blog";
-const JWT_AUDIENCE = "my-beautiful-blog-admins";
+const JWT_SECRET = process.env.JWT_SECRET || 'mon_secret_jwt';
+const JWT_ISSUER = 'my-beautiful-blog';
+const JWT_AUDIENCE = 'my-beautiful-blog-admins';
 
 export async function POST(request: Request) {
   try {
     const { username, password } = await request.json();
 
-    const userQuery = "SELECT * FROM users WHERE username = $1";
+    const userQuery = 'SELECT * FROM users WHERE username = $1';
     const userResult = await executeQuery(userQuery, [username]);
 
     if (userResult.rows.length === 0) {
       return NextResponse.json(
-        { error: "Identifiants incorrects" },
-        { status: 401 }
+        { error: 'Identifiants incorrects' },
+        { status: 401 },
       );
     }
 
@@ -27,8 +27,8 @@ export async function POST(request: Request) {
     const isPasswordValid = await verify(user.password, password);
     if (!isPasswordValid) {
       return NextResponse.json(
-        { error: "Identifiants incorrects" },
-        { status: 401 }
+        { error: 'Identifiants incorrects' },
+        { status: 401 },
       );
     }
 
@@ -40,10 +40,10 @@ export async function POST(request: Request) {
       },
       JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: '1h',
         issuer: JWT_ISSUER,
         audience: JWT_AUDIENCE,
-      }
+      },
     );
 
     return NextResponse.json({
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("Erreur lors de la connexion:", error);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    console.error('Erreur lors de la connexion:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
